@@ -16,12 +16,7 @@ const jwtClient = new google.auth.JWT(
   "slack@rpiambulance.com"
 );
 
-const request = {
-  spreadsheetId: SPREADSHEET_ID,
-  range: "A2:B"
-};
-
-const getChores = () => {
+const getChores = async () => {
   const sheets = google.sheets({
     version: "v4",
     auth: jwtClient
@@ -36,14 +31,17 @@ const getChores = () => {
     }
   });
 
-  sheets.spreadsheets.values.get(request, (err, response) => {
-    if (err) {
-      throw err;
-    }
-
-    console.log(response);
-    return response;
-  });
+  try {
+    const {
+      data: { values }
+    } = await sheets.spreadsheets.values.get({
+      spreadsheetId: SPREADSHEET_ID,
+      range: "A2:B"
+    });
+    return values;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 module.exports = { getChores };
