@@ -2,7 +2,7 @@
 const cron = require("node-cron");
 
 //local packages
-const { getChores } = require("./utilities/getChores.js");
+const { getTodaysChore } = require("./utilities/getChores.js");
 
 //package configuration
 
@@ -18,4 +18,4 @@ const { getChores } = require("./utilities/getChores.js");
 //   { timezone: "America/New_York" }
 // );
 
-(async () => console.log(await getChores()))();
+(async () => console.log(await getTodaysChore()))();

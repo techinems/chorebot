@@ -1,5 +1,6 @@
 //node pacakges
 const { google } = require("googleapis");
+const moment = require("moment");
 require("dotenv").config();
 
 //local packages
@@ -44,4 +45,15 @@ const getChores = async () => {
   }
 };
 
-module.exports = { getChores };
+const getTodaysChore = async () => {
+  const today = moment().format("YYYY-MM-DD");
+  const chores = await getChores();
+  for (let x = 0; x < chores.length; x++) {
+    if (today == chores[x][0]) {
+      return chores[x][1];
+    }
+  }
+  return -1;
+};
+
+module.exports = { getTodaysChore };
