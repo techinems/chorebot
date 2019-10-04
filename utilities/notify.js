@@ -1,6 +1,3 @@
-//node packages
-const moment = require("moment");
-
 //local packages
 const {
   app: {
@@ -30,7 +27,7 @@ const buildChoreElement = (chore, index) => {
         text: "Done!",
         emoji: true
       },
-      value: `done_${moment().format("YYYY-MM-DD")}_${index}`
+      action_id: `${index}`
     }
   };
 };

@@ -1,6 +1,6 @@
 //node pacakges
 const { google } = require("googleapis");
-const moment = require("moment");
+const moment = require("moment-timezone");
 require("dotenv").config();
 
 //local packages
