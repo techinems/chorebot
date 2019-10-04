@@ -1,8 +1,10 @@
 //node packages
 const cron = require("node-cron");
+require("dotenv").config();
 
 //local packages
-const { getTodaysChore } = require("./utilities/getChores.js");
+const { getTodaysChores } = require("./utilities/getChores.js");
+const { notifyOfficers, postToSlack } = require("./utilities/notify.js");
 
 //package configuration
 
@@ -12,10 +14,18 @@ const { getTodaysChore } = require("./utilities/getChores.js");
 
 // cron.schedule(
 //   "0 18 * * *",
-//   () => {
-//     getChores();
+//   async () => {
+//     const chores = await getTodaysChores();
+//     if (chores == -1) notifyOfficers();
+//     else postToSlack(chores);
 //   },
-//   { timezone: "America/New_York" }
+//   {
+//     timezone: "America/New_York"
+//   }
 // );
 
-(async () => console.log(await getTodaysChore()))();
+(async () => {
+  const chores = await getTodaysChores();
+  if (chores == -1) notifyOfficers();
+  else postToSlack(chores);
+})();

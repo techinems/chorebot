@@ -45,15 +45,15 @@ const getChores = async () => {
   }
 };
 
-const getTodaysChore = async () => {
+const getTodaysChores = async () => {
   const today = moment().format("YYYY-MM-DD");
-  const chores = await getChores();
-  for (let x = 0; x < chores.length; x++) {
-    if (today == chores[x][0]) {
-      return chores[x][1];
-    }
+  const allChores = await getChores();
+  let todaysChores = [];
+  for (const chore of allChores) {
+    if (today === chore[0]) todaysChores.push(chore[1]);
   }
-  return -1;
+  if (todaysChores.length == 0) return -1;
+  else return todaysChores;
 };
 
-module.exports = { getTodaysChore };
+module.exports = { getTodaysChores };
