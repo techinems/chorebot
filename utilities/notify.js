@@ -9,6 +9,7 @@ const {
     }
   }
 } = require("./bolt.js");
+const { randomPhrase } = require("./randomPhrases.js");
 
 //globals
 const TOKEN = process.env.SLACK_BOT_TOKEN;
@@ -49,7 +50,7 @@ const sendNoChores = () => {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: ":+1: There are no chores tonight! Have fun on crew!"
+          text: randomPhrase("no_chore")
         }
       }
     ]
@@ -66,7 +67,7 @@ const postToSlack = chores => {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: ":wave: Good evening, crew!"
+          text: randomPhrase("greeting")
         }
       },
       {
@@ -82,7 +83,8 @@ const postToSlack = chores => {
         text: {
           type: "mrkdwn",
           text:
-            "If you have any questions :thinking_face: please reach out to the vice president!"
+            randomPhrase("request") +
+            " If you have any questions :thinking_face: please reach out to the vice president!"
         }
       }
     ]
