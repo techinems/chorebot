@@ -4,7 +4,7 @@ require("dotenv").config();
 
 //local packages
 const { getTodaysChores } = require("./utilities/getChores.js");
-const { notifyOfficers, postToSlack } = require("./utilities/notify.js");
+const { sendNoChores, postToSlack } = require("./utilities/notify.js");
 
 //package configuration
 
@@ -26,6 +26,7 @@ const { notifyOfficers, postToSlack } = require("./utilities/notify.js");
 
 (async () => {
   const chores = await getTodaysChores();
-  if (chores == -1) notifyOfficers();
+  if (chores == -1) sendNoChores();
+  // TODO: in the future, notify the officers that there are no chores
   else postToSlack(chores);
 })();

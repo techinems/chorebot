@@ -1,5 +1,5 @@
-{
-  "greetings": [
+module.exports = {
+  greetings: [
     "Good evening!",
     "Howdy!",
     "Hey hey hey!",
@@ -8,7 +8,7 @@
     "Whatup peeps?",
     "Drumroll please...:drum_with_drumsticks:"
   ],
-  "request": [
+  request: [
     "Please click the button below as soon as they're done.",
     "After you're done, click the \"Done!\" button!",
     "After you go to the Snowman :icecream: or something, make sure that gets done! And then click the \"Done!\" button!",
@@ -16,4 +16,4 @@
     "Live, laugh, love...but most of all, make sure that get's done or you'll have a very upset vice president!",
     "Do us a flavor and click that ol' button there when you're done!"
   ]
-}
+};

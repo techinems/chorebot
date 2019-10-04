@@ -1,3 +1,6 @@
+//node packages
+const moment = require("moment");
+
 //local packages
 const {
   app: {
@@ -26,13 +29,31 @@ const buildChoreElement = (chore, index) => {
         text: "Done!",
         emoji: true
       },
-      value: `chore_done_${index}`
+      value: `done_${moment().format("YYYY-MM-DD")}_${index}`
     }
   };
 };
 
-const notifyOfficers = () => {
-  console.log("Notifying officers!");
+// const notifyOfficers = () => {
+//   console.log("Notifying officers!");
+// };
+// TODO: build function to notify officers there aren't any chores
+
+const sendNoChores = () => {
+  postMessage({
+    token: TOKEN,
+    channel: CHORES_CHANNEL,
+    text: "No chores tonight!",
+    blocks: [
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: ":+1: There are no chores tonight! Have fun on crew!"
+        }
+      }
+    ]
+  });
 };
 
 const postToSlack = chores => {
@@ -68,4 +89,4 @@ const postToSlack = chores => {
   });
 };
 
-module.exports = { notifyOfficers, postToSlack };
+module.exports = { sendNoChores, postToSlack };
