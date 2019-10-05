@@ -18,6 +18,8 @@ const CRON_SCHEDULE = process.env.CRON_SCHEDULE;
 //helper functions
 const runChores = async () => {
   console.log("Running ChoreBot!");
+  const date = new Date();
+  console.log(date.getHours());
   const chores = await getTodaysChores();
   if (chores == -1) sendNoChores();
   // TODO: in the future, notify the officers that there are no chores
