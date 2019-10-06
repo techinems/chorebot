@@ -1,4 +1,4 @@
-[![Build Status](https://cloud.drone.io/api/badges/rpiambulance/ChoreBot/status.svg)](https://cloud.drone.io/rpiambulance/ChoreBot)
+[![Build Status](https://cloud.drone.io/api/badges/rpiambulance/chorebot/status.svg)](https://cloud.drone.io/rpiambulance/chorebot)
 
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com)
 
