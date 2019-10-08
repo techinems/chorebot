@@ -11,7 +11,6 @@ const phrases = {
   request: [
     "Please click the button below as soon as they're done.",
     "After you're done, click the \"Done!\" button!",
-    "After you go to the Snowman :icecream: or something, make sure that gets done! And then click the \"Done!\" button!",
     "Please be so kind as to hit that button below once everything is done :hugging_face:",
     "Live, laugh, love...but most of all, make sure that get's done or you'll have a very upset vice president!",
     "Do us a flavor and click that ol' button there when you're done!"
@@ -22,6 +21,11 @@ const phrases = {
     "Have an awesome night! There are no chores to do."
   ]
 };
+
+const currentMonth = (new Date()).getMonth() + 1;
+if (4 <= currentMonth && currentMonth <= 9) {
+  phrases.request.push("After you go to the Snowman :icecream: or something, make sure that gets done! And then click the \"Done!\" button!");
+}
 
 const randomPhrase = type => {
   return phrases[type][Math.floor(Math.random() * phrases[type].length)];
