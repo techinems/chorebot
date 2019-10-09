@@ -22,13 +22,15 @@ const phrases = {
   ]
 };
 
-const currentMonth = (new Date()).getMonth() + 1;
-if (4 <= currentMonth && currentMonth <= 9) {
-  phrases.request.push("After you go to the Snowman :icecream: or something, make sure that gets done! And then click the \"Done!\" button!");
-}
-
 const randomPhrase = type => {
-  return phrases[type][Math.floor(Math.random() * phrases[type].length)];
+  const potentialPhrases = phrases[type];
+  if (type === 'request') {
+    const currentMonth = (new Date()).getMonth() + 1;
+    if (4 <= currentMonth && currentMonth <= 9) {
+      potentialPhrases.push("After you go to the Snowman :icecream: or something, make sure that gets done! And then click the \"Done!\" button!");
+    }
+  }
+  return potentialPhrases[Math.floor(Math.random() * potentialPhrases.length)];
 };
 
 module.exports = { randomPhrase };
