@@ -7,7 +7,10 @@ const phrases = {
     "It's that time of evening again!",
     ":wave: Whatup peeps?",
     "Drumroll please...:drum_with_drumsticks:",
-    "Hey there ambulance crew!:ambulance:"
+    "Hey there ambulance crew!:ambulance:",
+    "Hey there crew!:grin:",
+    "Howdy there!:face_with_cowboy_hat:",
+    "Hey crew!:v:"
   ],
   request: [
     "Please click the button below as soon as they're done.",
