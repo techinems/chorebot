@@ -13,7 +13,7 @@ const { markChoreDone } = require("./utilities/markChoreDone.js");
 if (process.env.SENTRY_DSN) {
   const sentryConfig = {
       dsn: process.env.SENTRY_DSN,
-      release: require('./package.json').version
+      release: `chorebot@${require('./package.json').version}`
   };
   if (process.env.ENVIRONMENT) sentryConfig.environment = process.env.ENVIRONMENT;
   Sentry.init(sentryConfig);
