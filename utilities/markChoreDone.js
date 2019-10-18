@@ -18,13 +18,9 @@ const crossOffAndTag = (user, index, blocks) => {
   return blocks;
 };
 
-const markChoreDone = (index, user, channel, ts, blocks) => {
-  update({
-    token: TOKEN,
-    channel: channel,
-    ts: ts,
-    blocks: crossOffAndTag(user, parseInt(index), blocks)
-  });
+const markChoreDone = (index, user, channel, ts, initialBlocks) => {
+  const blocks = crossOffAndTag(user, parseInt(index), initialBlocks);
+  update({ token: TOKEN, channel, ts, blocks });
 };
 
 module.exports = { markChoreDone };
