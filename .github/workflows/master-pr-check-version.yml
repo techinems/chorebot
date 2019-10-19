@@ -1,0 +1,23 @@
+name: "PR to Master: Check Version"
+
+on:
+  pull_request:
+    # Sequence of patterns matched against refs/heads
+    branches:    
+    - master
+
+jobs:
+  master-pr-check-version:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Check if version changed
+      run: |
+        version_changed=`git diff HEAD..origin/master package.json | grep version | wc -l | tr -d '[:space:]'`
+        if [ $version_changed -eq 0 ]; then
+          echo "Version has not been modified; failing..."
+          exit 1
+        else
+          echo "Version has been modified; good to go!"
+          exit 0
+        fi
