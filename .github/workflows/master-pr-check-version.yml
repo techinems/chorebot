@@ -14,10 +14,10 @@ jobs:
     - name: Check if version changed
       run: |
         version_changed=`git diff HEAD..origin/master package.json | grep version | wc -l | tr -d '[:space:]'`
-        if [ $version_changed -eq 0 ]; then
-          echo "Version has not been modified; failing..."
-          exit 1
-        else
+        if [ $version_changed -gt 1 ]; then
           echo "Version has been modified; good to go!"
           exit 0
+        else
+          echo "Version has not been modified; failing..."
+          exit 1
         fi
