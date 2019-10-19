@@ -1,4 +1,4 @@
-name: "PR to Master: Check Version"
+name: "Check for version update in PR to Master"
 
 on:
   pull_request:
