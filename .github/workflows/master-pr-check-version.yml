@@ -13,11 +13,19 @@ jobs:
     - uses: actions/checkout@v1
     - name: Check if version changed
       run: |
-        version_changed=`git diff HEAD..origin/master package.json | grep version | wc -l | tr -d '[:space:]'`
+        comparison_branch="HEAD..origin/master"
+        version_changed=`git diff $comparison_branch package.json | grep version | wc -l | tr -d '[:space:]'`
         if [ $version_changed -gt 1 ]; then
-          echo "Version has been modified; good to go!"
-          exit 0
+            echo "Versions are different; verifying that the version increased"
+            version_increased=`git diff $comparison_branch package.json | grep version | awk -F\" '{split($4, old, "."); getline; split($4, new, "."); if(new[1] > old[1] || (new[1] == old[1] && new[2] > old[2]) || (new[1] == old[1] && new[2] == old[2] && new[3] > old[3])) { print 1 } else { print 0 } }'`
+            if [ $version_increased -eq 1 ]; then
+                echo "Version is properly increased!"
+                exit 0
+            else
+                echo "Version is not properly increased; failing..."
+                exit 1
+            fi
         else
-          echo "Version has not been modified; failing..."
-          exit 1
+            echo "Version has not been modified; failing..."
+            exit 1
         fi
