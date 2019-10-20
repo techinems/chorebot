@@ -8,13 +8,14 @@ const privatekey = require("../keys/sheets-api.json");
 
 //globals
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
+const GDRIVE_EMAIL = process.env.GDRIVE_EMAIL;
 
 const jwtClient = new google.auth.JWT(
   privatekey.client_email,
   null,
   privatekey.private_key,
   ["https://www.googleapis.com/auth/spreadsheets.readonly"],
-  "slack@rpiambulance.com"
+  GDRIVE_EMAIL
 );
 
 const getChores = async () => {
@@ -23,23 +24,14 @@ const getChores = async () => {
     auth: jwtClient
   });
 
-  jwtClient.authorize(err => {
-    if (err) {
-      console.log(err);
-      return;
-    } else {
-      console.log("Successfully connected!");
-    }
-  });
+  jwtClient.authorize(err => console.log(err ? err : "Successfully connected!"));
 
   try {
-    const {
-      data: { values }
-    } = await sheets.spreadsheets.values.get({
+    const { data } = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
       range: "A2:B"
     });
-    return values;
+    return data ? data.values : null;
   } catch (error) {
     console.error(error);
   }
@@ -47,13 +39,8 @@ const getChores = async () => {
 
 const getTodaysChores = async () => {
   const today = moment().format("YYYY-MM-DD");
-  const allChores = await getChores();
-  let todaysChores = [];
-  for (const chore of allChores) {
-    if (today === chore[0]) todaysChores.push(chore[1]);
-  }
-  if (todaysChores.length == 0) return -1;
-  else return todaysChores;
+  const todaysChores = await getChores().map(c => c[0] === today ? c[1] : null);
+  return todaysChores.length === 0 ? -1 : todaysChores;
 };
 
 module.exports = { getTodaysChores };
