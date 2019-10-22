@@ -10,10 +10,10 @@ const {
         }
     }
 } = require("./bolt.js");
+const privatekey = require("../keys/sheets-api.json");
 
 //globals
 const TOKEN = process.env.SLACK_BOT_TOKEN;
-const privatekey = require("../keys/sheets-api.json");
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
 const GDRIVE_EMAIL = process.env.GDRIVE_EMAIL;
 
@@ -67,7 +67,7 @@ const markChoreDone = async (index, user, channel, ts, initialBlocks) => {
     update({ token: TOKEN, channel, ts, blocks });
 };
 
-function formatDate(date) {
+const formatDate = (date) => {
     var d = new Date(date),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
@@ -79,5 +79,6 @@ function formatDate(date) {
         day = '0' + day;
 
     return [year, month, day].join('-');
-}
+};
+
 module.exports = { markChoreDone };
