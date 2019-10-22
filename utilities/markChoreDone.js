@@ -46,6 +46,7 @@ const markChoreUser = async (user, date, choretext) => {
                     valueInputOption: 'USER_ENTERED',
                     resource: {values: [[user.name, user.id]]}
                 });
+                break;
             }
         }
     } catch (error) {
