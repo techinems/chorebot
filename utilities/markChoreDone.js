@@ -25,7 +25,7 @@ const jwtClient = new google.auth.JWT(
     GDRIVE_EMAIL
 );
 
-const markChoreUser = async (user, date, choretext) => {
+const setCompletedBy = async (user, date, choretext) => {
     const sheets = google.sheets({
         version: "v4",
         auth: jwtClient
@@ -63,7 +63,8 @@ const crossOffAndTag = (user, index, blocks) => {
 };
 
 const markChoreDone = async (index, user, channel, ts, initialBlocks) => {
-    await markChoreUser(user, formatDate(new Date(ts * 1000)), initialBlocks[parseInt(index) + 2].text.text.replace("&gt;", ""));
+    await setCompletedBy(user, formatDate(new Date(ts * 1000)), initialBlocks[parseInt(index) + 2]
+        .text.text.replace("&gt;", ""));
     const blocks = crossOffAndTag(user.id, parseInt(index), initialBlocks);
     update({ token: TOKEN, channel, ts, blocks });
 };
