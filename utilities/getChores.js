@@ -8,13 +8,14 @@ const privatekey = require("../keys/sheets-api.json");
 
 //globals
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
+const GDRIVE_EMAIL = process.env.GDRIVE_EMAIL;
 
 const jwtClient = new google.auth.JWT(
   privatekey.client_email,
   null,
   privatekey.private_key,
   ["https://www.googleapis.com/auth/spreadsheets.readonly"],
-  "slack@rpiambulance.com"
+  GDRIVE_EMAIL
 );
 
 const getChores = async () => {
