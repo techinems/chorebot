@@ -34,7 +34,7 @@ const phrases = {
 
 const randomPhrase = type => {
   const potentialPhrases = phrases[type];
-  if (type === 'request') {
+  if (type === "request") {
     const currentMonth = (new Date()).getMonth() + 1;
     if (4 <= currentMonth && currentMonth <= 9) {
       potentialPhrases.push("After you go to the Snowman :icecream: or something, make sure that gets done! And then click the \"Done!\" button!");
