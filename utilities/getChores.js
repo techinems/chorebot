@@ -39,7 +39,7 @@ const getChores = async () => {
 
 const getTodaysChores = async () => {
   const today = moment().format("YYYY-MM-DD");
-  const todaysChores = await getChores().map(c => c[0] === today ? c[1] : null);
+  const todaysChores = (await getChores()).map(c => c[0] === today ? c[1] : null).filter(Boolean);
   return todaysChores.length === 0 ? -1 : todaysChores;
 };
 
