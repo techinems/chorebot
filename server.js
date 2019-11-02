@@ -1,5 +1,6 @@
 //node packages
 const cron = require("node-cron");
+const axios = require('axios');
 require("dotenv").config();
 
 //local packages
@@ -14,6 +15,8 @@ const { markChoreDone } = require("./utilities/markChoreDone.js");
 
 //globals
 const CRON_SCHEDULE = process.env.CRON_SCHEDULE;
+const WHITEBOARD_CRON_SCHEDULE = process.env.WHITEBOARD_CRON_SCHEDULE;
+const WHITEBOARD_URL = process.env.WHITEBOARD_URL;
 
 //helper functions
 const runChores = async () => {
@@ -43,3 +46,8 @@ app.action(
 );
 
 cron.schedule(CRON_SCHEDULE, runChores);
+cron.schedule(WHITEBOARD_CRON_SCHEDULE, async () => {
+  let chores = await getTodaysChores();
+  chores = chores === -1 ? {chores: []} : { chores }; 
+  axios.post(`${WHITEBOARD_URL}/chores`, chores).catch((err) => console.error(err));
+});
