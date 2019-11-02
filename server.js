@@ -1,6 +1,6 @@
 //node packages
 const cron = require("node-cron");
-const axios = require('axios');
+const axios = require("axios");
 require("dotenv").config();
 
 //local packages
