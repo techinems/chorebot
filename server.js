@@ -17,7 +17,7 @@ const { markChoreDone } = require("./utilities/markChoreDone.js");
 //globals
 const CRON_SCHEDULE = process.env.CRON_SCHEDULE;
 const WHITEBOARD_CRON_SCHEDULE = process.env.WHITEBOARD_CRON_SCHEDULE;
-const WHITEBOARD_URL = process.env.WHITEBOARD_URL;
+const WHITEBOARD_SERVER_URL = process.env.WHITEBOARD_SERVER_URL;
 
 // Configure Sentry exception logging
 if (process.env.SENTRY_DSN) {
@@ -55,5 +55,5 @@ cron.schedule(CRON_SCHEDULE, runChores);
 cron.schedule(WHITEBOARD_CRON_SCHEDULE, async () => {
   let chores = await getTodaysChores();
   chores = chores === -1 ? {chores: []} : { chores }; 
-  axios.post(`${WHITEBOARD_URL}/chores`, chores).catch((err) => console.error(err));
+  axios.post(`${WHITEBOARD_SERVER_URL}/chores`, chores).catch((err) => console.error(err));
 });
