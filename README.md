@@ -4,7 +4,7 @@
 
 # ChoreBot
 
-**ChoreBot** is a Slack integration that takes assigned tasks right from a Google Sheet and posts them in a Slack channel. It allows chores to be assigned well in advance to ease the life of whoever does the scheduling.
+**ChoreBot** is primarily a service that takes assigned tasks right from a Google Sheet and posts them in a Slack channel. It allows chores to be assigned well in advance to ease the life of whoever does the scheduling. Secondarily, **ChoreBot** feeds [headsup](https://github.com/rpiambulance/headsup) with chore data to keep our info board updated.
 
 ### Setup
 
