@@ -1,0 +1,18 @@
+name: Deploy (dev)
+on:
+  pull_request:
+    branches:    
+    - dev
+jobs:
+  deploy-dev:
+    name: Deploying to dev environment
+    runs-on: ubuntu-latest
+    steps:
+    - name: Use SSH to run docker-compose on the server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: docker-compose -f /drone/docker-compose.yml up -d --build ${{ secrets.CONTAINER_NAME_DEV }}
