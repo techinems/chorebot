@@ -1,6 +1,7 @@
 //node packages
 const cron = require("node-cron");
-const Sentry = require('@sentry/node');
+const axios = require("axios");
+const Sentry = require("@sentry/node");
 require("dotenv").config();
 
 //local packages
@@ -9,11 +10,20 @@ const { getTodaysChores } = require("./utilities/getChores.js");
 const { sendNoChores, postToSlack } = require("./utilities/notify.js");
 const { markChoreDone } = require("./utilities/markChoreDone.js");
 
+//package configuration
+
+//local configuration
+
+//globals
+const CRON_SCHEDULE = process.env.CRON_SCHEDULE;
+const WHITEBOARD_CRON_SCHEDULE = process.env.WHITEBOARD_CRON_SCHEDULE;
+const WHITEBOARD_SERVER_URL = process.env.WHITEBOARD_SERVER_URL;
+
 // Configure Sentry exception logging
 if (process.env.SENTRY_DSN) {
   const sentryConfig = {
       dsn: process.env.SENTRY_DSN,
-      release: `chorebot@${require('./package.json').version}`
+      release: `chorebot@${require("./package.json").version}`
   };
   if (process.env.ENVIRONMENT) sentryConfig.environment = process.env.ENVIRONMENT;
   Sentry.init(sentryConfig);
@@ -41,4 +51,9 @@ app.action(
   }
 );
 
-cron.schedule(process.env.CRON_SCHEDULE, runChores);
+cron.schedule(CRON_SCHEDULE, runChores);
+cron.schedule(WHITEBOARD_CRON_SCHEDULE, async () => {
+  let chores = await getTodaysChores();
+  chores = chores === -1 ? {chores: []} : { chores }; 
+  axios.post(`${WHITEBOARD_SERVER_URL}/chores`, chores).catch((err) => console.error(err));
+});
