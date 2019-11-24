@@ -1,6 +1,8 @@
 //node packages
+const bodyParser = require("body-parser");
+const express = require("express");
+const api = express();
 const cron = require("node-cron");
-const axios = require("axios");
 const Sentry = require("@sentry/node");
 require("dotenv").config();
 
@@ -16,8 +18,7 @@ const { markChoreDone } = require("./utilities/markChoreDone.js");
 
 //globals
 const CRON_SCHEDULE = process.env.CRON_SCHEDULE;
-const WHITEBOARD_CRON_SCHEDULE = process.env.WHITEBOARD_CRON_SCHEDULE;
-const WHITEBOARD_SERVER_URL = process.env.WHITEBOARD_SERVER_URL;
+const WEBSITE_ACCESS_TOKEN = process.env.WEBSITE_ACCESS_TOKEN;
 
 // Configure Sentry exception logging
 if (process.env.SENTRY_DSN) {
@@ -52,8 +53,19 @@ app.action(
 );
 
 cron.schedule(CRON_SCHEDULE, runChores);
-cron.schedule(WHITEBOARD_CRON_SCHEDULE, async () => {
-  let chores = await getTodaysChores();
-  chores = chores === -1 ? {chores: []} : { chores }; 
-  axios.post(`${WHITEBOARD_SERVER_URL}/chores`, chores).catch((err) => console.error(err));
+
+api.use(bodyParser.json());
+
+api.get("/get/chores", async (req, res) => {
+    if (WEBSITE_ACCESS_TOKEN !== req.query.token) {
+        res.sendStatus(403);
+    } else {
+        let chores = await getTodaysChores();
+        chores = chores === -1 ? {chores: []} : {chores};
+        res.send(chores);
+    }
+});
+
+api.listen(80, function () {
+    console.log("Started on PORT 80");
 });
