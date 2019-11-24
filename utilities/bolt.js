@@ -10,7 +10,7 @@ const PORT = process.env.NODE_PORT || 3000;
 const TOKEN = process.env.SLACK_BOT_TOKEN;
 const SECRET = process.env.SLACK_SIGNING_SECRET;
 const CRON_SCHEDULE = process.env.CRON_SCHEDULE;
-const WEBSITE_ACCESS_TOKEN = process.env.WEBSITE_ACCESS_TOKEN;
+const API_VERIFICATION = process.env.API_VERIFICATION_TOKEN;
 
 const expressReceiver = new ExpressReceiver({
     signingSecret: SECRET
@@ -23,7 +23,7 @@ const app = new App({
 });
 
 expressReceiver.app.get("/get/chores", async (req, res) => {
-    if (WEBSITE_ACCESS_TOKEN !== req.query.token) {
+    if (API_VERIFICATION !== req.query.token) {
         res.sendStatus(403);
     } else {
         let chores = await getTodaysChores();
