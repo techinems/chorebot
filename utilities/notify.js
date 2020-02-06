@@ -51,7 +51,7 @@ const postToSlack = chores => postSlackMessage("Today's chores have been posted!
   buildMarkdownSection(randomPhrase("greeting")),
   buildMarkdownSection("Tonight's chores:"),
   ...chores.map((c, i) => buildChoreElement(c, i)),
-  buildMarkdownSection(randomPhrase("request") + " If you have any questions " + 
+  buildMarkdownSection(randomPhrase("request") + " If you have any questions " +
     ":thinking_face: please reach out to the vice president!")
 ]);
 

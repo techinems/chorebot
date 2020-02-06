@@ -37,7 +37,7 @@ Note the format of the date (`YYYY-MM-DD`) and the fact that multiple chores can
 
 ##### Service account
 
-Create a service account using [these instructions](https://developers.google.com/android/management/service-account). Once it's created, share the previously created spreadsheet with the service account's address. View-only permissions should be fine; we're only reading data from the sheet.
+Create a service account using [these instructions](https://developers.google.com/android/management/service-account). Once it's created, share the previously created spreadsheet with the service account's address. You will need both Read and Write permissions (`https://www.googleapis.com/auth/spreadsheets`) for this to work.
 
 #### Your server
 

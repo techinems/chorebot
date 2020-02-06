@@ -43,7 +43,7 @@ app.action(
   },
   async ({ action, body }) => {
     if (!action || !body || !body.user || !body.channel || !body.message) return;
-    markChoreDone(action.action_id, body.user.id, body.channel.id, body.message.ts,
+      await markChoreDone(action.action_id, body.user, body.channel.id, body.message.ts,
       body.message.blocks);
   }
 );
