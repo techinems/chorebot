@@ -4,11 +4,11 @@ const Sentry = require("@sentry/node");
 require("dotenv").config();
 
 //local packages
-const {Authorization} = require("./middleware/Authorization");
+const {authorization} = require("./middleware/Authorization");
 const {app, expressReceiver} = require("./utilities/bolt.js");
-const {Notifications} = require("./utilities/Notifications");
-const {Actions} = require("./utilities/Actions");
-const {Chores} = require("./utilities/Chores");
+const {runChores} = require("./utilities/Notifications");
+const {markChoreDone} = require("./utilities/Actions");
+const {getTodaysChores} = require("./utilities/Chores");
 
 //globals
 const CRON_SCHEDULE = process.env.CRON_SCHEDULE;
@@ -23,10 +23,6 @@ if (process.env.SENTRY_DSN) {
   Sentry.init(sentryConfig);
 }
 
-//Initialize Classes
-const chores = new Chores();
-const notifications = new Notifications(chores);
-const actions = new Actions();
 
 app.action(
   /^\d+$/,
@@ -36,19 +32,19 @@ app.action(
   },
   async ({ action, body }) => {
     if (!action || !body || !body.user || !body.channel || !body.message) return;
-      actions.markChoreDone(action.action_id, body.user.id, body.channel.id, body.message.ts,
+      markChoreDone(action.action_id, body.user.id, body.channel.id, body.message.ts,
       body.message.blocks);
   }
 );
 
-cron.schedule(CRON_SCHEDULE, notifications.runChores.bind(notifications));
+cron.schedule(CRON_SCHEDULE, runChores);
 
 expressReceiver.app.use((req, res, next) => {
-    Authorization.authorization(req, res, next);
+    authorization(req, res, next);
 });
 
 expressReceiver.app.get("/get/chores", async (req, res) => {
-    let todayschores = await chores.getTodaysChores();
+    let todayschores = await getTodaysChores();
     todayschores = todayschores === -1 ? {chores: []} : {todayschores};
     res.send(todayschores);
 });

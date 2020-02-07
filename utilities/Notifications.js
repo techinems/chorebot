@@ -8,53 +8,48 @@ const {
 
 const fs = require("fs");
 
+const {getTodaysChores} = require("./Chores");
+
 require("dotenv").config();
 
 const TOKEN = process.env.SLACK_BOT_TOKEN;
 const CHORES_CHANNEL = process.env.CHORES_CHANNEL;
 
+const phrases = JSON.parse(fs.readFileSync("./phrases.json"));
 
-class Notifications {
-    constructor(chores) {
-        this.chores = chores;
-        this.phrases = JSON.parse(fs.readFileSync("./phrases.json"));
-    }
-
-    async runChores() {
+const runChores = async () => {
         console.log("Running ChoreBot!");
-        const todayschores = await this.chores.getTodaysChores();
-        if (todayschores === -1) this.postNoChores();
-        else this.postChores(todayschores);
-    }
+    const todayschores = await getTodaysChores();
+    if (todayschores === -1) postNoChores();
+    else (postChores(todayschores));
+};
 
-    postChores(chores) {
-        this.postSlackMessage("Today's chores have been posted!", [
-            this.buildMarkdownSection(this.randomPhrase("greeting")),
-            this.buildMarkdownSection("Tonight's chores:"),
-            ...chores.map((c, i) => this.buildChoreElement(c, i)),
-            this.buildMarkdownSection(this.randomPhrase("request") + " If you have any questions " +
+const postChores = chores => {
+    postSlackMessage("Today's chores have been posted!", [
+        buildMarkdownSection(randomPhrase("greeting")),
+        buildMarkdownSection("Tonight's chores:"),
+        ...chores.map((c, i) => buildChoreElement(c, i)),
+        buildMarkdownSection(randomPhrase("request") + " If you have any questions " +
                 ":thinking_face: please reach out to the vice president!")
         ]);
-    }
+};
 
-    postNoChores() {
-        this.postSlackMessage("No chores tonight!", [
-            this.buildMarkdownSection(this.randomPhrase("no_chore"))
-        ]);
-    }
+const postNoChores = () => postSlackMessage("No chores tonight!", [
+    buildMarkdownSection(randomPhrase("no_chore"))
+]);
 
 //helper functions
 
-    postSlackMessage(text, blocks) {
-        postMessage({
-            token: TOKEN,
-            channel: CHORES_CHANNEL,
-            text, blocks
-        });
-    }
+const postSlackMessage = (text, blocks) => {
+    postMessage({
+        token: TOKEN,
+        channel: CHORES_CHANNEL,
+        text, blocks
+    });
+};
 
-    buildChoreElement(chore, index) {
-        let section = this.buildMarkdownSection(`>${chore}`);
+const buildChoreElement = (chore, index) => {
+    let section = buildMarkdownSection(`>${chore}`);
         section.accessory = {
             type: "button",
             text: {
@@ -65,19 +60,18 @@ class Notifications {
             action_id: `${index}`
         };
         return section;
-    }
-
-    buildMarkdownSection(text) {
+};
+const buildMarkdownSection = text => {
         return {
             type: "section",
             text: {
                 type: "mrkdwn", text
             }
         };
-    }
+};
 
-    randomPhrase(type) {
-        const potentialPhrases = this.phrases[type];
+const randomPhrase = type => {
+    const potentialPhrases = phrases[type];
         if (type === "request") {
             const currentMonth = (new Date()).getMonth() + 1;
             if (4 <= currentMonth <= 9) {
@@ -86,7 +80,6 @@ class Notifications {
             }
         }
         return potentialPhrases[Math.floor(Math.random() * potentialPhrases.length)];
-    }
-}
+};
 
-module.exports = {Notifications};
+module.exports = {runChores};
