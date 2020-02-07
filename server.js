@@ -4,14 +4,11 @@ const Sentry = require("@sentry/node");
 require("dotenv").config();
 
 //local packages
-const { app } = require("./utilities/bolt.js");
-const { getTodaysChores } = require("./utilities/getChores.js");
-const { sendNoChores, postToSlack } = require("./utilities/notify.js");
-const { markChoreDone } = require("./utilities/markChoreDone.js");
-
-//package configuration
-
-//local configuration
+const {Authorization} = require("./middleware/Authorization");
+const {app, expressReceiver} = require("./utilities/bolt.js");
+const {Notifications} = require("./utilities/Notifications");
+const {Actions} = require("./utilities/Actions");
+const {Chores} = require("./utilities/Chores");
 
 //globals
 const CRON_SCHEDULE = process.env.CRON_SCHEDULE;
@@ -26,14 +23,10 @@ if (process.env.SENTRY_DSN) {
   Sentry.init(sentryConfig);
 }
 
-//helper functions
-const runChores = async () => {
-  console.log("Running ChoreBot!");
-  const chores = await getTodaysChores();
-  if (chores === -1) sendNoChores();
-  // TODO: in the future, notify the officers that there are no chores
-  else postToSlack(chores);
-};
+//Initialize Classes
+const chores = new Chores();
+const notifications = new Notifications(chores);
+const actions = new Actions();
 
 app.action(
   /^\d+$/,
@@ -43,9 +36,19 @@ app.action(
   },
   async ({ action, body }) => {
     if (!action || !body || !body.user || !body.channel || !body.message) return;
-    markChoreDone(action.action_id, body.user.id, body.channel.id, body.message.ts,
+      actions.markChoreDone(action.action_id, body.user.id, body.channel.id, body.message.ts,
       body.message.blocks);
   }
 );
 
-cron.schedule(CRON_SCHEDULE, runChores);
+cron.schedule(CRON_SCHEDULE, notifications.runChores.bind(notifications));
+
+expressReceiver.app.use((req, res, next) => {
+    Authorization.authorization(req, res, next);
+});
+
+expressReceiver.app.get("/get/chores", async (req, res) => {
+    let todayschores = await chores.getTodaysChores();
+    todayschores = todayschores === -1 ? {chores: []} : {todayschores};
+    res.send(todayschores);
+});

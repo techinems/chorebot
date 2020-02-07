@@ -1,0 +1,11 @@
+{
+  "greeting": [
+    ":wave: Good evening!",
+  ],
+  "request": [
+    "Please click the button below as soon as they're done."
+  ],
+  "no_chore": [
+    ":+1: There are no chores tonight! Have fun on crew!"
+  ]
+}
