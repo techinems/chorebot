@@ -1,5 +1,5 @@
-const phrases = {
-  greeting: [
+{
+  "greeting": [
     ":wave: Good evening!",
     ":wave: Howdy!",
     "Hey hey hey!",
@@ -12,7 +12,7 @@ const phrases = {
     "Howdy there! :face_with_cowboy_hat:",
     "Hey crew! :v:"
   ],
-  request: [
+  "request": [
     "Please click the button below as soon as they're done.",
     "After you're done, click the \"Done!\" button!",
     "Please be so kind as to hit that button below once everything is done :hugging_face:",
@@ -21,7 +21,7 @@ const phrases = {
     "Once you're done, be sure to hit that \"Done!\" button!",
     "Don't forget to hit the button when you're done! Enjoy your night!"
   ],
-  no_chore: [
+  "no_chore": [
     ":+1: There are no chores tonight! Have fun on crew!",
     "Wow! You lucked out! No chores tonight :simple_smile:",
     "Have an awesome night! There are no chores to do.",
@@ -30,17 +30,4 @@ const phrases = {
     "Oh man! There are no chores tonight! Enjoy your night!",
     "Go get some food! :hamburger: There are no chores to do!"
   ]
-};
-
-const randomPhrase = type => {
-  const potentialPhrases = phrases[type];
-  if (type === "request") {
-    const currentMonth = (new Date()).getMonth() + 1;
-    if (4 <= currentMonth && currentMonth <= 9) {
-      potentialPhrases.push("After you go to the Snowman :icecream: or something, make sure that gets done! And then click the \"Done!\" button!");
-    }
-  }
-  return potentialPhrases[Math.floor(Math.random() * potentialPhrases.length)];
-};
-
-module.exports = { randomPhrase };
+}
