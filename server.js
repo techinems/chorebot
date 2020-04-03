@@ -38,8 +38,8 @@ const runChores = async () => {
 app.action(
   /^\d+$/,
   async ({ ack, next }) => {
-    ack();
-    next();
+    await ack();
+    await next();
   },
   async ({ action, body }) => {
     if (!action || !body || !body.user || !body.channel || !body.message) return;
