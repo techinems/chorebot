@@ -23,7 +23,7 @@ const phrases = {
   ],
   no_chore: [
     ":+1: There are no chores tonight! Have fun on crew!",
-    "Wow! You lucked out! No chores tonight :simple_smile:",
+    "Wow! You lucked out! No chores tonight :slightly_smiling_face:",
     "Have an awesome night! There are no chores to do.",
     "No chores tonight! Be sure to get some sleep!",
     "There are no chores tonight! Good luck getting some studying done! :male-student: :female-student:",
