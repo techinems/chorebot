@@ -1,6 +1,6 @@
 {
   "name": "chorebot",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "A chore notification tool grabbing data from a Google spreadsheet",
   "main": "server.js",
   "scripts": {
