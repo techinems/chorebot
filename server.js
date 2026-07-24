@@ -1,6 +1,5 @@
 //node packages
 const cron = require("node-cron");
-const axios = require("axios");
 const Sentry = require("@sentry/node");
 require("dotenv").config();
 
@@ -33,30 +32,47 @@ if (process.env.SENTRY_DSN) {
 //helper functions
 const runChores = async () => {
   console.log("Running ChoreBot!");
-  const chores = await getTodaysChores();
-  if (chores === -1) sendNoChores();
-  // TODO: in the future, notify the officers that there are no chores
-  else postToSlack(chores);
+  try {
+    const chores = await getTodaysChores();
+    if (chores === -1) await sendNoChores();
+    // TODO: in the future, notify the officers that there are no chores
+    else await postToSlack(chores);
+  } catch (err) {
+    console.error("Failed to run chores:", err);
+  }
 };
 
 app.action(
   /^\d+$/,
   async ({ ack, next }) => {
-    ack();
-    next();
+    await ack();
+    await next();
   },
   async ({ action, body }) => {
     if (!action || !body || !body.user || !body.channel || !body.message) return;
-    markChoreDone(action.action_id, body.user.id, body.channel.id, body.message.ts,
-      body.message.blocks);
-    }
-  );
-
-  if (ENABLE) {
-    cron.schedule(CRON_SCHEDULE, runChores);
-    cron.schedule(WHITEBOARD_CRON_SCHEDULE, async () => {
-      let chores = await getTodaysChores();
-      chores = chores === -1 ? {chores: []} : { chores };
-      axios.post(`${WHITEBOARD_SERVER_URL}/chores`, chores).catch((err) => console.error(err));
-    });
+    await markChoreDone(
+      action.action_id,
+      body.user.id,
+      body.channel.id,
+      body.message.ts,
+      body.message.blocks
+    );
   }
+);
+
+if (ENABLE) {
+  cron.schedule(CRON_SCHEDULE, runChores);
+  cron.schedule(WHITEBOARD_CRON_SCHEDULE, async () => {
+    try {
+      let chores = await getTodaysChores();
+      chores = chores === -1 ? { chores: [] } : { chores };
+      await fetch(`${WHITEBOARD_SERVER_URL}/chores`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(chores)
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  });
+}

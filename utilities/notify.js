@@ -7,30 +7,11 @@ const {
   }
 } = require("./bolt.js");
 const { randomPhrase } = require("./randomPhrases.js");
+const { buildMarkdownSection, buildChoreElement } = require("./blocks.js");
 
 //globals
 const TOKEN = process.env.SLACK_BOT_TOKEN;
 const CHORES_CHANNEL = process.env.CHORES_CHANNEL;
-
-const buildMarkdownSection = text => ({
-  type: "section",
-  text: { type: "mrkdwn", text }
-});
-
-//helper functions
-const buildChoreElement = (chore, index) => {
-  let section = buildMarkdownSection(`>${chore}`);
-  section.accessory = {
-    type: "button",
-    text: {
-      type: "plain_text",
-      text: "Done!",
-      emoji: true
-    },
-    action_id: `${index}`
-  };
-  return section;
-};
 
 const postSlackMessage = (text, blocks) => postMessage({
   token: TOKEN,
@@ -51,7 +32,7 @@ const postToSlack = chores => postSlackMessage("Today's chores have been posted!
   buildMarkdownSection(randomPhrase("greeting")),
   buildMarkdownSection("Tonight's chores:"),
   ...chores.map((c, i) => buildChoreElement(c, i)),
-  buildMarkdownSection(randomPhrase("request") + " If you have any questions " + 
+  buildMarkdownSection(randomPhrase("request") + " If you have any questions " +
     ":thinking_face: please reach out to the vice president!")
 ]);
 

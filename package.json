@@ -3,27 +3,36 @@
   "version": "1.0.10",
   "description": "A chore notification tool grabbing data from a Google spreadsheet",
   "main": "server.js",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "lint": "eslint .",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rpiambulance/ChoreBot.git"
+    "url": "git+https://github.com/techinems/chorebot.git"
   },
   "author": "Dan Bruce <dan@ddbruce.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/rpiambulance/ChoreBot/issues"
+    "url": "https://github.com/techinems/chorebot/issues"
   },
-  "homepage": "https://github.com/rpiambulance/ChoreBot#readme",
+  "homepage": "https://github.com/techinems/chorebot#readme",
   "dependencies": {
-    "@slack/bolt": "^1.3.0",
-    "axios": "^0.21.1",
-    "@sentry/node": "^5.15.4",
-    "dotenv": "^8.1.0",
-    "eslint": "^6.5.1",
-    "googleapis": "^43.0.0",
-    "moment-timezone": "^0.5.28",
-    "node-cron": "^2.0.3"
+    "@sentry/node": "^10.68.0",
+    "@slack/bolt": "^4.4.0",
+    "dotenv": "^17.2.3",
+    "googleapis": "^173.0.0",
+    "moment-timezone": "^0.5.46",
+    "node-cron": "^4.6.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.0",
+    "eslint": "^9.39.0",
+    "globals": "^16.5.0",
+    "jest": "^30.2.0"
   }
 }

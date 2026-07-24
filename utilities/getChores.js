@@ -5,18 +5,20 @@ require("dotenv").config();
 
 //local packages
 const privatekey = require("../keys/sheets-api.json");
+const { filterTodaysChores } = require("./chores.js");
 
 //globals
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
 const GDRIVE_EMAIL = process.env.GDRIVE_EMAIL;
 
-const jwtClient = new google.auth.JWT(
-  privatekey.client_email,
-  null,
-  privatekey.private_key,
-  ["https://www.googleapis.com/auth/spreadsheets.readonly"],
-  GDRIVE_EMAIL
-);
+// Object-form constructor is the stable API across modern googleapis versions
+// (the old positional form is deprecated). Same service-account JWT auth.
+const jwtClient = new google.auth.JWT({
+  email: privatekey.client_email,
+  key: privatekey.private_key,
+  scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
+  subject: GDRIVE_EMAIL,
+});
 
 const getChores = async () => {
   const sheets = google.sheets({
@@ -26,20 +28,17 @@ const getChores = async () => {
 
   jwtClient.authorize(err => console.log(err ? err : "Successfully connected!"));
 
-  try {
-    const { data } = await sheets.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEET_ID,
-      range: "A2:B"
-    });
-    return data ? data.values : null;
-  } catch (error) {
-    console.error(error);
-  }
+  const { data } = await sheets.spreadsheets.values.get({
+    spreadsheetId: SPREADSHEET_ID,
+    range: "A2:B"
+  });
+  return data ? data.values : null;
 };
 
 const getTodaysChores = async () => {
   const today = moment().format("YYYY-MM-DD");
-  const todaysChores = (await getChores()).map(c => c[0] === today ? c[1] : null).filter(Boolean);
+  const rows = await getChores();
+  const todaysChores = filterTodaysChores(rows, today);
   return todaysChores.length === 0 ? -1 : todaysChores;
 };
 
