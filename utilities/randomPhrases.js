@@ -33,7 +33,10 @@ const phrases = {
 };
 
 const randomPhrase = type => {
-  const potentialPhrases = phrases[type];
+  // Copy so we never mutate the shared `phrases` arrays. The original pushed
+  // the seasonal phrase onto phrases.request on every in-season call, which
+  // grew the array unbounded and skewed the odds over time.
+  const potentialPhrases = [...phrases[type]];
   if (type === "request") {
     const currentMonth = (new Date()).getMonth() + 1;
     if (4 <= currentMonth && currentMonth <= 9) {
@@ -43,4 +46,4 @@ const randomPhrase = type => {
   return potentialPhrases[Math.floor(Math.random() * potentialPhrases.length)];
 };
 
-module.exports = { randomPhrase };
+module.exports = { randomPhrase, phrases };

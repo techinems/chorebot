@@ -6,21 +6,15 @@ const {
     }
   }
 } = require("./bolt.js");
+const { crossOffAndTag } = require("./blocks.js");
 
 //globals
 const TOKEN = process.env.SLACK_BOT_TOKEN;
 
 //helper functions
-const crossOffAndTag = (user, index, blocks) => {
-  const choreText = blocks[index + 2].text.text.replace("&gt;", "");
-  blocks[index + 2].text.text = `>~${choreText}~ Completed by <@${user}>`;
-  delete blocks[index + 2].accessory;
-  return blocks;
-};
-
-const markChoreDone = (index, user, channel, ts, initialBlocks) => {
+const markChoreDone = async (index, user, channel, ts, initialBlocks) => {
   const blocks = crossOffAndTag(user, parseInt(index), initialBlocks);
-  update({ token: TOKEN, channel, ts, blocks });
+  await update({ token: TOKEN, channel, ts, blocks });
 };
 
 module.exports = { markChoreDone };

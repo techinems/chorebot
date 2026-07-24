@@ -61,3 +61,6 @@ typings/
 .next
 
 keys/
+
+# Deploy secrets
+scripts/config.sh
